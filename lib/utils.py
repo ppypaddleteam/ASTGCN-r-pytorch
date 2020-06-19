@@ -187,8 +187,8 @@ def load_graphdata_channel1(graph_signal_matrix_filename, num_of_hours, num_of_d
     # test_x = test_x[:, :, 0:1, :]
     test_target = file_data['test_target']
 
-    # mean = file_data['mean'][:, :, 0:1, :]  # (1, 1, 3, 1)
-    # std = file_data['std'][:, :, 0:1, :]  # (1, 1, 3, 1)
+    mean = file_data['mean'][:, :, :, :]  # (1, 1, 3, 1)
+    std = file_data['std'][:, :, :, :]  # (1, 1, 3, 1)
 
     # ------- train_loader -------
     train_x_tensor = torch.from_numpy(train_x).type(torch.FloatTensor).to(DEVICE)  # (B, N, F, T)
