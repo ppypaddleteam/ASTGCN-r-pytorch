@@ -6,6 +6,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
 from .metrics import masked_mape_np
 from scipy.sparse.linalg import eigs
+from torch import nn
 
 class RMSLELoss(nn.Module):
     def __init__(self):
