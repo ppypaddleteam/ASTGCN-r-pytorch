@@ -85,7 +85,7 @@ def get_sample_indices(data_sequence, num_of_weeks, num_of_days, num_of_hours,
     if num_of_days > 0:
         day_indices = search_data(data_sequence.shape[0], num_of_days,
                                   label_start_idx, num_for_predict,
-                                  24, points_per_hour)
+                                  10, points_per_hour)
         if not day_indices:
             return None, None, None, None
 
@@ -275,7 +275,9 @@ args = parser.parse_args()
 config = configparser.ConfigParser()
 print('Read configuration file: %s' % (args.config))
 config.read(args.config)
-data_config = config['Data']
+
+print(config.sections())
+data_config = config["Data"]
 training_config = config['Training']
 
 adj_filename = data_config['adj_filename']
@@ -300,4 +302,4 @@ graph_signal_matrix_filename = data_config['graph_signal_matrix_filename']
 data = np.load(graph_signal_matrix_filename)
 data['data'].shape
 
-all_data = read_and_generate_dataset(graph_signal_matrix_filename, 0, 0, num_of_hours, num_for_predict, points_per_hour=points_per_hour, save=True)
+all_data = read_and_generate_dataset(graph_signal_matrix_filename, 0, num_of_days, num_of_hours, num_for_predict, points_per_hour=points_per_hour, save=True)
