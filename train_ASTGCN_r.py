@@ -10,7 +10,7 @@ import shutil
 import argparse
 import configparser
 from model.ASTGCN_r import make_model
-from lib.utils import load_graphdata_channel1, get_adjacency_matrix, compute_val_loss_mstgcn, predict_and_save_results_mstgcn
+from lib.utils import load_graphdata_channel1, get_adjacency_matrix, compute_val_loss_mstgcn, predict_and_save_results_mstgcn, RMSLELoss
 from tensorboardX import SummaryWriter
 
 parser = argparse.ArgumentParser()
@@ -99,7 +99,7 @@ def train_main():
     print('start_epoch\t', start_epoch)
     print('epochs\t', epochs)
 
-    criterion = nn.MSELoss().to(DEVICE)
+    criterion = RMSLELoss().to(DEVICE)
     optimizer = optim.Adam(net.parameters(), lr=learning_rate)
     sw = SummaryWriter(logdir=params_path, flush_secs=5)
     print(net)

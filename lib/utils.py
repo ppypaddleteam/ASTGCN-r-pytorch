@@ -7,6 +7,13 @@ from sklearn.metrics import mean_squared_error
 from .metrics import masked_mape_np
 from scipy.sparse.linalg import eigs
 
+class RMSLELoss(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.mse = nn.MSELoss()
+        
+    def forward(self, pred, actual):
+        return torch.sqrt(self.mse(torch.log(pred + 1), torch.log(actual + 1)))
 
 def re_normalization(x, mean, std):
     x = x * std + mean
