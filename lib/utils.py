@@ -369,19 +369,23 @@ def predict_and_save_results_mstgcn(net, data_loader, data_target_tensor, global
             mae = mean_absolute_error(data_target_tensor[:, :, i], prediction[:, :, i])
             rmse = mean_squared_error(data_target_tensor[:, :, i], prediction[:, :, i]) ** 0.5
             mape = masked_mape_np(data_target_tensor[:, :, i], prediction[:, :, i], 0)
+            rmsle = mean_squared_error(np.log(data_target_tensor[:, :, i] + 1), np.log(prediction[:, :, i] + 1)) ** 0.5
             print('MAE: %.2f' % (mae))
             print('RMSE: %.2f' % (rmse))
             print('MAPE: %.2f' % (mape))
-            excel_list.extend([mae, rmse, mape])
+            print('RMSLE: %.4f' % (rmsle))
+            excel_list.extend([mae, rmse, mape, rmsle])
 
         # print overall results
         mae = mean_absolute_error(data_target_tensor.reshape(-1, 1), prediction.reshape(-1, 1))
         rmse = mean_squared_error(data_target_tensor.reshape(-1, 1), prediction.reshape(-1, 1)) ** 0.5
         mape = masked_mape_np(data_target_tensor.reshape(-1, 1), prediction.reshape(-1, 1), 0)
+        rmsle = mean_squared_error(np.log(data_target_tensor[:, :, i] + 1), np.log(prediction[:, :, i] + 1)) ** 0.5
         print('all MAE: %.2f' % (mae))
         print('all RMSE: %.2f' % (rmse))
         print('all MAPE: %.2f' % (mape))
-        excel_list.extend([mae, rmse, mape])
+        print('all RMSLE: %.4f' % (rmsle))
+        excel_list.extend([mae, rmse, mape, rmsle])
         print(excel_list)
 
 
