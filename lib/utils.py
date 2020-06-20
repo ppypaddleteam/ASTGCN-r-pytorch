@@ -389,3 +389,38 @@ def predict_and_save_results_mstgcn(net, data_loader, data_target_tensor, global
         print(excel_list)
 
 
+def predict_and_save_results_mstgcn_without_evaluation(net, input_data, global_step, params_path, num_of_rounds, batch_size, type):
+    '''
+    :param net: nn.Module
+    :param data_loader: torch.utils.data.utils.DataLoader
+    :param data_target_tensor: tensor
+    :param epoch: int
+    :param _mean: (1, 1, 3, 1)
+    :param _std: (1, 1, 3, 1)
+    :param params_path: the path for saving the results
+    :return:
+    '''
+    net.train(False)  # ensure dropout layers are in test mode
+
+    with torch.no_grad():
+
+        prediction = []  # 存储所有batch的output
+        feat_mean = np.mean(input_data, axis=0)
+        for i in range(num_of_rounds):
+
+            if len(prediction) > 0:
+                encoder_inputs = prediction[-1]
+            else:
+                encoder_inputs = input_data
+
+            encoder_inputs = np.concatenate([np.expand_dims(encoder_inputs, 0) for _ in range(batch_size)], axis=0)
+            outputs = net(encoder_inputs)
+            prediction.append(outputs.detach().cpu().numpy())
+
+        prediction = np.concatenate(prediction, 0)  # (batch, T', 1)
+
+        print('prediction:', prediction.shape)
+        output_filename = os.path.join(params_path, 'output_epoch_%s_%s' % (global_step, type))
+        np.savez_compressed(output_filename, prediction=prediction)
+
+
